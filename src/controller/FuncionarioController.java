@@ -22,7 +22,7 @@ public class FuncionarioController implements ICadastrarProfessor, IInscricao {
 	@Override
 	public void salvarInscricao(int cpfProfessor, int codigoDisciplina, int codigoProcesso) {
 		// TODO Auto-generated method stub
-
+			
 	}
 
 }

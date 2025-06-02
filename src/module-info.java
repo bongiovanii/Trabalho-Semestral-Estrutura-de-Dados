@@ -5,4 +5,5 @@
  * 
  */
 module SCTD {
+	requires Lista;
 }
