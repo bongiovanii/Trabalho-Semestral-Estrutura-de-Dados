@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module SCTD {
-	requires Lista;
-}
