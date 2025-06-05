@@ -3,7 +3,7 @@ package model;
 public class Disciplina extends Curso {
 	private int codigoDisciplina;
 	private String diaSemana;
-	private int horario;
+	private String horario;
 	private int qtdHorasDiarias;
 	
 	public Disciplina() {
@@ -22,10 +22,10 @@ public class Disciplina extends Curso {
 	public void setDiaSemana(String diaSemana) {
 		this.diaSemana = diaSemana;
 	}
-	public int getHorario() {
+	public String getHorario() {
 		return horario;
 	}
-	public void setHorario(int horario) {
+	public void setHorario(String horario) {
 		this.horario = horario;
 	}
 	public int getQtdHorasDiarias() {

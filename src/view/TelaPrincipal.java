@@ -9,6 +9,10 @@ import java.awt.Color;
 import javax.swing.JMenu;
 import javax.swing.JButton;
 import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaPrincipal extends JFrame {
 
@@ -33,7 +37,7 @@ public class TelaPrincipal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 450);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 250, 240));
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 
@@ -41,27 +45,49 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnDisciplinas = new JButton("Disciplinas");
+		btnDisciplinas.setForeground(Color.WHITE);
+		btnDisciplinas.setBackground(new Color(26, 95, 180));
 		btnDisciplinas.setToolTipText("Acessar Disciplinas");
-		btnDisciplinas.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
-		btnDisciplinas.setBounds(10, 10, 125, 25);
+		btnDisciplinas.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnDisciplinas.setBounds(290, 108, 125, 25);
 		contentPane.add(btnDisciplinas);
 		
 		JButton btnCursos = new JButton("Cursos");
+		btnCursos.setForeground(Color.WHITE);
+		btnCursos.setBackground(new Color(26, 95, 180));
 		btnCursos.setToolTipText("Acessar Cursos");
-		btnCursos.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
-		btnCursos.setBounds(155, 10, 125, 25);
+		btnCursos.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnCursos.setBounds(153, 108, 125, 25);
 		contentPane.add(btnCursos);
 		
 		JButton btnProfessores = new JButton("Professores");
+		btnProfessores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnProfessores.setForeground(Color.WHITE);
+		btnProfessores.setBackground(new Color(26, 95, 180));
 		btnProfessores.setToolTipText("Acessar Professores");
-		btnProfessores.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
-		btnProfessores.setBounds(300, 10, 125, 25);
+		btnProfessores.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnProfessores.setBounds(16, 108, 125, 25);
 		contentPane.add(btnProfessores);
 		
 		JButton btnProcessos = new JButton("Processos");
+		btnProcessos.setForeground(Color.WHITE);
+		btnProcessos.setBackground(new Color(26, 95, 180));
 		btnProcessos.setToolTipText("Acessar Processos");
-		btnProcessos.setFont(new Font("Lucida Sans", Font.PLAIN, 14));
-		btnProcessos.setBounds(445, 10, 125, 25);
+		btnProcessos.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnProcessos.setBounds(427, 108, 125, 25);
 		contentPane.add(btnProcessos);
+		
+		JLabel lblNewLabel = new JLabel("Sistema de Gerenciamento De Contratações");
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblNewLabel.setBounds(80, 12, 455, 36);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblSejaBemVindo = new JLabel("Bem Vindo!");
+		lblSejaBemVindo.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblSejaBemVindo.setBounds(255, 60, 85, 17);
+		contentPane.add(lblSejaBemVindo);
 	}
 }
