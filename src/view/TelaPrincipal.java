@@ -63,6 +63,9 @@ public class TelaPrincipal extends JFrame {
 		JButton btnProfessores = new JButton("Professores");
 		btnProfessores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				TelaProfessores telaProfessores = new TelaProfessores();
+				telaProfessores.setVisible(true);
+				dispose();
 			}
 		});
 		btnProfessores.setForeground(Color.WHITE);

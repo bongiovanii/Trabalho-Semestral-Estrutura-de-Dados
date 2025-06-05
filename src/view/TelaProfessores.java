@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -54,49 +56,49 @@ public class TelaProfessores extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Cadastrar Novo Professor");
-		lblNewLabel.setBounds(23, 12, 178, 17);
+		lblNewLabel.setBounds(23, 60, 178, 17);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(23, 41, 60, 17);
+		lblNome.setBounds(23, 82, 60, 17);
 		contentPane.add(lblNome);
 		
 		textField_nome = new JTextField();
-		textField_nome.setBounds(23, 58, 172, 21);
+		textField_nome.setBounds(23, 100, 172, 21);
 		contentPane.add(textField_nome);
 		textField_nome.setColumns(10);
 		
 		JLabel lblCpf = new JLabel("CPF");
-		lblCpf.setBounds(23, 91, 60, 17);
+		lblCpf.setBounds(23, 125, 60, 17);
 		contentPane.add(lblCpf);
 		
 		textField_cpf = new JTextField();
-		textField_cpf.setBounds(23, 109, 172, 21);
+		textField_cpf.setBounds(23, 144, 172, 21);
 		contentPane.add(textField_cpf);
 		textField_cpf.setColumns(10);
 		
 		JLabel lblrea = new JLabel("Área");
-		lblrea.setBounds(23, 142, 60, 17);
+		lblrea.setBounds(23, 169, 60, 17);
 		contentPane.add(lblrea);
 		
 		textField_area = new JTextField();
-		textField_area.setBounds(23, 159, 172, 21);
+		textField_area.setBounds(23, 188, 172, 21);
 		contentPane.add(textField_area);
 		textField_area.setColumns(10);
 		
 		JLabel lblPontos = new JLabel("Pontos");
-		lblPontos.setBounds(23, 192, 60, 17);
+		lblPontos.setBounds(23, 210, 60, 17);
 		contentPane.add(lblPontos);
 		
 		textField_pontos = new JTextField();
-		textField_pontos.setBounds(23, 212, 172, 21);
+		textField_pontos.setBounds(23, 234, 172, 21);
 		contentPane.add(textField_pontos);
 		textField_pontos.setColumns(10);
 		
 		JButton btnCadastrar = new JButton("Cadastrar\n");
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBackground(new Color(26, 95, 180));
-		btnCadastrar.setBounds(53, 245, 105, 27);
+		btnCadastrar.setBounds(52, 267, 105, 27);
 		contentPane.add(btnCadastrar);
 		
 		JLabel lblConsultarProfessor = new JLabel("Consultar Professor");
@@ -120,7 +122,25 @@ public class TelaProfessores extends JFrame {
 		
 		TelaProfessorController telaProfessorController = new TelaProfessorController(textField_nome, textField_cpf, textField_area, textField_pontos);
 		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setBackground(new Color(154, 153, 150));
+		btnVoltar.setBounds(23, 7, 78, 17);
+		contentPane.add(btnVoltar);
+		btnVoltar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TelaPrincipal telaPrincipal = new TelaPrincipal();
+				telaPrincipal.setVisible(true);
+				dispose();
+				
+			}
+		});
+		
+		
+		
 		btnCadastrar.addActionListener(telaProfessorController);
+		
 	
 	
 	}
