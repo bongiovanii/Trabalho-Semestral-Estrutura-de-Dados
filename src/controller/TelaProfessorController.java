@@ -37,7 +37,7 @@ public class TelaProfessorController implements ActionListener {
 		return valido;
 	}
 
-	// Falta fazer funcionar os botões
+	
 
 	public void chamarCadastroProfessor() {
 		

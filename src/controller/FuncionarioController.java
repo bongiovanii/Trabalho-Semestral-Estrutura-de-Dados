@@ -3,6 +3,7 @@ package controller;
 import java.util.Random;
 
 import br.edu.fateczl.bongiovani.Lista;
+import model.Curso;
 import model.Disciplina;
 import model.Professor;
 
@@ -22,7 +23,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		try {
 			professores.addLast(professor);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			System.out.println(e.getMessage());
 		}
 
@@ -78,6 +79,18 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	public void cadastraCurso(int codigoCurso, String nomeCurso) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void removeCurso(Curso curso) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void consultaCurso(Curso curso) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
