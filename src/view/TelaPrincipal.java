@@ -44,6 +44,14 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setLayout(null);
 
 		JButton btnDisciplinas = new JButton("Disciplinas");
+
+		btnDisciplinas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaDisciplinas telaDisciplinas = new TelaDisciplinas();
+				telaDisciplinas.setVisible(true);
+				dispose();
+			}
+		});
 		btnDisciplinas.setForeground(Color.WHITE);
 		btnDisciplinas.setBackground(new Color(26, 95, 180));
 		btnDisciplinas.setToolTipText("Acessar Disciplinas");
