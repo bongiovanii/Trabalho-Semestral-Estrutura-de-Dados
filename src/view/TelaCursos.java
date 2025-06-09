@@ -80,6 +80,8 @@ public class TelaCursos extends JFrame {
 		btnCadastrar.setBackground(new Color(26, 95, 180));
 		btnCadastrar.setBounds(54, 227, 105, 27);
 		contentPane.add(btnCadastrar);
+		
+
 
 		JLabel lblConsultarProfessor = new JLabel("Consultar Curso");
 		lblConsultarProfessor.setBounds(230, 12, 124, 17);
@@ -104,11 +106,11 @@ public class TelaCursos extends JFrame {
 		btnVoltar.setBackground(new Color(154, 153, 150));
 		btnVoltar.setBounds(23, 7, 78, 17);
 		contentPane.add(btnVoltar);
-		
+
 		JLabel lblAreaCurso = new JLabel("Área de Conhecimento");
 		lblAreaCurso.setBounds(23, 176, 172, 17);
 		contentPane.add(lblAreaCurso);
-		
+
 		textField_Area = new JTextField();
 		textField_Area.setColumns(10);
 		textField_Area.setBounds(23, 195, 172, 21);
@@ -123,7 +125,10 @@ public class TelaCursos extends JFrame {
 
 			}
 		});
+		
+		TelaCursosController tccontroller = new TelaCursosController(textField_codigo, textField_nomeCurso,
+				textField_Area);
+		btnCadastrar.addActionListener(tccontroller);
 
-		TelaCursosController tccontroller = new TelaCursosController();
 	}
 }

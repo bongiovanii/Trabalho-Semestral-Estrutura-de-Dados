@@ -14,8 +14,10 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	Professor professor = new Professor();
 	Disciplina disciplina = new Disciplina();
 	Lista<Object> inscricoes = new Lista<>();
+	static HashMap<Integer, Curso> cursos = new HashMap<>();
 
 	static HashMap<Long, Professor> professores = new HashMap<>();
+
 
 	@Override
 	public void cadastrarNovoProfessor(long cpfProfessor, String nome, String area, int pontos) {
@@ -23,8 +25,13 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		professor.setNome(nome);
 		professor.setArea(area);
 		professor.setPontos(pontos);
+		
+		if(!professores.containsKey(cpfProfessor)) {
+			professores.put(professor.getCpf(), professor);
+		}else {
+			JOptionPane.showMessageDialog(null, "Professor já cadastrado!");
+		}
 
-		professores.put(professor.getCpf(), professor);
 	}
 
 	@Override
@@ -78,7 +85,17 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 
 	@Override
 	public void cadastraCurso(int codigoCurso, String nomeCurso) {
-		// TODO Auto-generated method stub
+		Curso curso = new Curso();
+		curso.setCodigocodigo(codigoCurso);
+		curso.setNomeCurso(nomeCurso);
+	
+		
+		if (!cursos.containsKey(codigoCurso)) {
+			cursos.put(codigoCurso, curso);
+			JOptionPane.showMessageDialog(null, "Curso " + curso.getNomeCurso() + " adicionado!");
+		} else {
+			JOptionPane.showMessageDialog(null, "Curso com código " + codigoCurso + " já existe.");
+		}
 
 	}
 
