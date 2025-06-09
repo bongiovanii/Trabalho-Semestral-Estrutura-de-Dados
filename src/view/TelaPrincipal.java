@@ -107,5 +107,18 @@ public class TelaPrincipal extends JFrame {
 		lblSejaBemVindo.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblSejaBemVindo.setBounds(255, 60, 85, 17);
 		contentPane.add(lblSejaBemVindo);
+		
+		JButton btnSairDoSistema = new JButton("Sair do Sistema");
+		btnSairDoSistema.setForeground(new Color(255, 255, 255));
+		btnSairDoSistema.setBackground(new Color(165, 29, 45));
+		btnSairDoSistema.setBounds(218, 305, 155, 27);
+		contentPane.add(btnSairDoSistema);
+		btnSairDoSistema.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+			
+		
 	}
 }
