@@ -21,6 +21,7 @@ public class TelaCursos extends JFrame {
 	private JTextField textField_codigo;
 	private JTextField textField_nomeCurso;
 	private JTextField textField_consultaCurso;
+	private JTextField textField_Area;
 
 	/**
 	 * Launch the application.
@@ -66,7 +67,7 @@ public class TelaCursos extends JFrame {
 		contentPane.add(textField_nomeCurso);
 
 		JLabel lblCodigoCurso = new JLabel("Código do Curso");
-		lblCodigoCurso.setBounds(23, 125, 91, 17);
+		lblCodigoCurso.setBounds(23, 125, 172, 17);
 		contentPane.add(lblCodigoCurso);
 
 		textField_codigo = new JTextField();
@@ -77,7 +78,7 @@ public class TelaCursos extends JFrame {
 		JButton btnCadastrar = new JButton("Cadastrar\n");
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBackground(new Color(26, 95, 180));
-		btnCadastrar.setBounds(49, 176, 105, 27);
+		btnCadastrar.setBounds(54, 227, 105, 27);
 		contentPane.add(btnCadastrar);
 
 		JLabel lblConsultarProfessor = new JLabel("Consultar Curso");
@@ -103,6 +104,15 @@ public class TelaCursos extends JFrame {
 		btnVoltar.setBackground(new Color(154, 153, 150));
 		btnVoltar.setBounds(23, 7, 78, 17);
 		contentPane.add(btnVoltar);
+		
+		JLabel lblAreaCurso = new JLabel("Área de Conhecimento");
+		lblAreaCurso.setBounds(23, 176, 172, 17);
+		contentPane.add(lblAreaCurso);
+		
+		textField_Area = new JTextField();
+		textField_Area.setColumns(10);
+		textField_Area.setBounds(23, 195, 172, 21);
+		contentPane.add(textField_Area);
 		btnVoltar.addActionListener(new ActionListener() {
 
 			@Override

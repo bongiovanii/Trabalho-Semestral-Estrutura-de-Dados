@@ -6,6 +6,15 @@ public class Disciplina extends Curso {
 	private String horario;
 	private int qtdHorasDiarias;
 	private String nomeDisciplina;
+	private int codigoCurso;
+
+	public int getCodigoCurso() {
+		return codigoCurso;
+	}
+
+	public void setCodigoCurso(int codigoCurso) {
+		this.codigoCurso = codigoCurso;
+	}
 
 	public Disciplina() {
 		super();
