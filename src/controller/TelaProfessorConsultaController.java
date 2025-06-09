@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 
 public class TelaProfessorConsultaController implements ActionListener{
 	private JTextField textField_cpfConsulta;
-	
+	FuncionarioController func =  new FuncionarioController();
 	
 	
 	public TelaProfessorConsultaController(JTextField textField_cpfConsulta) {
@@ -32,6 +32,11 @@ public class TelaProfessorConsultaController implements ActionListener{
 		try {
 			String cpfConsulta = textField_cpfConsulta.getText();
 			long cpf = Long.parseLong(cpfConsulta);
+			
+			func.consultarProfessor(cpf);
+			
+			
+			
 			
 			// Dado do cpf capturado do text field cpf consulta, agora falta fazer a validação de existencia e mostrar, 
 			// através de JOptionpane e HashTables

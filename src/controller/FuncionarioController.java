@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.HashMap;
 import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 import br.edu.fateczl.bongiovani.Lista;
 import model.Curso;
@@ -11,7 +14,8 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	Professor professor = new Professor();
 	Disciplina disciplina = new Disciplina();
 	Lista<Object> inscricoes = new Lista<>();
-	Lista<Professor> professores = new Lista<>();
+
+	static HashMap<Long, Professor> professores = new HashMap<>();
 
 	@Override
 	public void cadastrarNovoProfessor(long cpfProfessor, String nome, String area, int pontos) {
@@ -20,13 +24,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		professor.setArea(area);
 		professor.setPontos(pontos);
 
-		try {
-			professores.addLast(professor);
-		} catch (Exception e) {
-			
-			System.out.println(e.getMessage());
-		}
-
+		professores.put(professor.getCpf(), professor);
 	}
 
 	@Override
@@ -52,8 +50,11 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	@Override
-	public void consultarProfessor(Professor professor) {
-		// TODO Auto-generated method stub
+	public void consultarProfessor(long cpf) {
+		
+		Professor professorAux =  professores.get(cpf);
+		JOptionPane.showMessageDialog(null, "Professor: " + professorAux.getNome() + "\nCpf: " + professorAux.getCpf()
+		+ "\nPontos: " + professorAux.getPontos() + "\nÁrea: " + professorAux.getArea());
 
 	}
 
@@ -84,13 +85,13 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	@Override
 	public void removeCurso(Curso curso) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void consultaCurso(Curso curso) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

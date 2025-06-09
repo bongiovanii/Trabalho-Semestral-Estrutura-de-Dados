@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.TelaProfessorConsultaController;
 import controller.TelaProfessorController;
 
 import java.awt.Color;
@@ -120,6 +121,8 @@ public class TelaProfessores extends JFrame {
 		btnConsultar.setBackground(new Color(26, 95, 180));
 		btnConsultar.setBounds(414, 55, 105, 27);
 		contentPane.add(btnConsultar);
+		TelaProfessorConsultaController consulta =  new TelaProfessorConsultaController(textField_cpfConsulta);
+		btnConsultar.addActionListener(consulta);
 
 		TelaProfessorController telaProfessorController = new TelaProfessorController(textField_nome, textField_cpf,
 				textField_area, textField_pontos);
