@@ -26,9 +26,6 @@ public class TelaProfessores extends JFrame {
 	private JTextField textField_pontos;
 	private JTextField textField_cpfConsulta;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -42,9 +39,6 @@ public class TelaProfessores extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public TelaProfessores() {
 		setTitle("Professores");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +58,7 @@ public class TelaProfessores extends JFrame {
 		lblNome.setBounds(23, 82, 60, 17);
 		contentPane.add(lblNome);
 
-		textField_nome = new JTextField(); // recebe uma string com o nome do professor
+		textField_nome = new JTextField();
 		textField_nome.setBounds(23, 100, 172, 21);
 		contentPane.add(textField_nome);
 		textField_nome.setColumns(10);
@@ -73,7 +67,7 @@ public class TelaProfessores extends JFrame {
 		lblCpf.setBounds(23, 125, 60, 17);
 		contentPane.add(lblCpf);
 
-		textField_cpf = new JTextField(); // recebe um valor long com o cpf do professor
+		textField_cpf = new JTextField();
 		textField_cpf.setBounds(23, 144, 172, 21);
 		contentPane.add(textField_cpf);
 		textField_cpf.setColumns(10);
@@ -82,7 +76,7 @@ public class TelaProfessores extends JFrame {
 		lblrea.setBounds(23, 169, 60, 17);
 		contentPane.add(lblrea);
 
-		textField_area = new JTextField(); // recebe uma string com a ára que o professor se inscreveu
+		textField_area = new JTextField();
 		textField_area.setBounds(23, 188, 172, 21);
 		contentPane.add(textField_area);
 		textField_area.setColumns(10);
@@ -91,16 +85,31 @@ public class TelaProfessores extends JFrame {
 		lblPontos.setBounds(23, 210, 60, 17);
 		contentPane.add(lblPontos);
 
-		textField_pontos = new JTextField(); // recebe um valor int com a quantidade de pontos acumulados pelo professor
+		textField_pontos = new JTextField();
 		textField_pontos.setBounds(23, 234, 172, 21);
 		contentPane.add(textField_pontos);
 		textField_pontos.setColumns(10);
 
-		JButton btnCadastrar = new JButton("Cadastrar\n"); // salva os valores enviados anteriormente
+		// Botão Cadastrar
+		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBackground(new Color(26, 95, 180));
-		btnCadastrar.setBounds(52, 267, 105, 27);
+		btnCadastrar.setBounds(23, 267, 105, 27);
 		contentPane.add(btnCadastrar);
+
+		// Botão Atualizar
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.setForeground(Color.WHITE);
+		btnAtualizar.setBackground(new Color(26, 95, 180));
+		btnAtualizar.setBounds(138, 267, 105, 27);
+		contentPane.add(btnAtualizar);
+
+		// Botão Remover
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.setForeground(Color.WHITE);
+		btnRemover.setBackground(new Color(26, 95, 180));
+		btnRemover.setBounds(253, 267, 105, 27);
+		contentPane.add(btnRemover);
 
 		JLabel lblConsultarProfessor = new JLabel("Consultar Professor");
 		lblConsultarProfessor.setBounds(230, 12, 124, 17);
@@ -115,34 +124,51 @@ public class TelaProfessores extends JFrame {
 		lblCpf_1.setBounds(230, 41, 60, 17);
 		contentPane.add(lblCpf_1);
 
-		JButton btnConsultar = new JButton("Consultar");// permite a pesquisa dos dados de um
-														// professor por meio do CPF
+		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.setForeground(Color.WHITE);
 		btnConsultar.setBackground(new Color(26, 95, 180));
 		btnConsultar.setBounds(414, 55, 105, 27);
 		contentPane.add(btnConsultar);
-		TelaProfessorConsultaController consulta =  new TelaProfessorConsultaController(textField_cpfConsulta);
+
+		// Controladores
+		TelaProfessorConsultaController consulta = new TelaProfessorConsultaController(textField_cpfConsulta);
 		btnConsultar.addActionListener(consulta);
 
 		TelaProfessorController telaProfessorController = new TelaProfessorController(textField_nome, textField_cpf,
 				textField_area, textField_pontos);
+
+		// Ações dos botões principais
+		btnCadastrar.addActionListener(telaProfessorController);
+
+		// Implementar depois: Atualizar e Remover
+		btnAtualizar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: implementar atualização via controller
+				// ex: telaProfessorController.atualizarProfessor(...);
+			}
+		});
+
+		btnRemover.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: implementar remoção via controller
+				// ex: telaProfessorController.removerProfessor(...);
+			}
+		});
 
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setBackground(new Color(154, 153, 150));
 		btnVoltar.setBounds(23, 7, 78, 17);
 		contentPane.add(btnVoltar);
 		btnVoltar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TelaPrincipal telaPrincipal = new TelaPrincipal();
 				telaPrincipal.setVisible(true);
 				dispose();
-
 			}
 		});
-
-		btnCadastrar.addActionListener(telaProfessorController);
 
 	}
 }

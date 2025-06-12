@@ -90,10 +90,17 @@ public class TelaPrincipal extends JFrame {
 		btnProfessores.setBounds(16, 108, 125, 25);
 		contentPane.add(btnProfessores);
 
-		JButton btnProcessos = new JButton("Processos");
+		JButton btnProcessos = new JButton("Inscrições");
+		btnProcessos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaProcessos telaProcessos = new TelaProcessos();
+				telaProcessos.setVisible(true);
+				dispose();
+			}
+		});
 		btnProcessos.setForeground(Color.WHITE);
 		btnProcessos.setBackground(new Color(26, 95, 180));
-		btnProcessos.setToolTipText("Acessar Processos");
+		btnProcessos.setToolTipText("Acessar Inscrições");
 		btnProcessos.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnProcessos.setBounds(427, 108, 125, 25);
 		contentPane.add(btnProcessos);
@@ -107,7 +114,7 @@ public class TelaPrincipal extends JFrame {
 		lblSejaBemVindo.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblSejaBemVindo.setBounds(255, 60, 85, 17);
 		contentPane.add(lblSejaBemVindo);
-		
+
 		JButton btnSairDoSistema = new JButton("Sair do Sistema");
 		btnSairDoSistema.setForeground(new Color(255, 255, 255));
 		btnSairDoSistema.setBackground(new Color(165, 29, 45));
@@ -118,7 +125,6 @@ public class TelaPrincipal extends JFrame {
 				dispose();
 			}
 		});
-			
-		
+
 	}
 }
