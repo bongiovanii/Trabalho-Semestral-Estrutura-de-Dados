@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.FuncionarioController;
 import controller.TelaDisciplinasController;
+import javax.swing.UIManager;
 
 public class TelaDisciplinas extends JFrame {
 
@@ -158,6 +159,24 @@ public class TelaDisciplinas extends JFrame {
 			}
 		});
 		
+		
+		
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnRemover.setForeground(Color.WHITE);
+		btnRemover.setBackground(new Color(26, 95, 180));
+		btnRemover.setBounds(230, 328, 105, 27);
+		contentPane.add(btnRemover);
+		
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.setForeground(Color.WHITE);
+		btnAtualizar.setBackground(new Color(26, 95, 180));
+		btnAtualizar.setBounds(392, 328, 105, 27);
+		contentPane.add(btnAtualizar);
+		
 		TelaDisciplinasController telaDisciplinasController =
 		        new TelaDisciplinasController(
 		            textField_disciplinaConsulta,
@@ -168,7 +187,6 @@ public class TelaDisciplinas extends JFrame {
 		            textField_horasDiarias,
 		            textField_codigoCurso
 		        );
-
 
 		btnCadastrar.addActionListener(e ->{
 			if(telaDisciplinasController.validaTela()) {
@@ -182,9 +200,20 @@ public class TelaDisciplinas extends JFrame {
 			}
 		});
 		
+		btnRemover.addActionListener(e ->{
+			if(telaDisciplinasController.validaConsulta()) {
+				telaDisciplinasController.chamarRemover();
+			}
+		});
+		
+		btnAtualizar.addActionListener(e ->{
+			if(telaDisciplinasController.validaTela()) {
+				telaDisciplinasController.chamarAtualiza();
+			}
+		});
+		
 		
 		
 
 	}
-
 }

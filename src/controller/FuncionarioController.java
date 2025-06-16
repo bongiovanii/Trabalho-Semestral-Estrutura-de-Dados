@@ -311,8 +311,71 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	@Override
-	public void removerDisciplina(Disciplina disciplina) {
-		// TODO: implementar remoção de disciplina
+	public boolean removerDisciplina(long codigoDisciplina) {
+		Lista<String> linhasMantidas = new Lista<>();
+		boolean encontrado = false;
+		Disciplina disciplinaParaRemover = null;
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoDisciplinas))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+
+				if (partes.length >= 4) {
+					long codigoAtual = Long.parseLong(partes[0].trim());
+
+					if (codigoAtual != codigoDisciplina) {
+						// Adiciona apenas se for diferente do codigo a ser removido
+						linhasMantidas.addLast(linha);
+					} else {
+						// Codigo igual: este professor será removido
+						long codigo = Long.parseLong(partes[0].trim());
+
+						String nome = partes[1].trim();
+						String diaSemana = partes[2].trim();
+						String horario = partes[3].trim();
+						String horasDiarias = partes[4].trim();
+						long codigoCursoVinculado = Long.parseLong(partes[5]);
+
+						disciplinaParaRemover = new Disciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias, codigoCursoVinculado);
+						
+						
+						encontrado = true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo: " + e.getMessage());
+			return false;
+		}
+
+		if (!encontrado) {
+			JOptionPane.showMessageDialog(null, "Disciplina com codigo " + codigoDisciplina + " não encontrado.");
+			return false;
+		}
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas))) {
+			int total = linhasMantidas.size();
+			for (int i = 0; i < total; i++) {
+				writer.write(linhasMantidas.get(i));
+				writer.newLine();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao escrever o arquivo: " + e.getMessage());
+			return false;
+		}
+
+		// Remove da tabela hash
+		if (disciplinaParaRemover != null) {
+			boolean removido = tabHashDisciplinas.remover(disciplinaParaRemover);
+			if (removido == false) {
+				JOptionPane.showMessageDialog(null, "Removido do CSV, mas não encontrado na hash.");
+			}
+		}
+
+		JOptionPane.showMessageDialog(null, "Disciplina removido com sucesso.");
+		return true;
 	}
 
 	@Override
@@ -364,6 +427,68 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		}
 
 		return null; // caso não encontre
+	}
+	
+	public void atualizarDisciplina(long codigoDisciplina, String newNome, String newDiaSemana, String newHorario,
+			String newQtdHorasDiarias, long newCodigoCursoVinculado) {
+		Lista<String> linhasAtualizadas = new Lista<>();
+		boolean encontrado = false;
+		Disciplina disciplinaAtualizada = null;
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoDisciplinas))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+
+				if (partes.length == 6) {
+					long codigoLido = Long.parseLong(partes[0].trim());
+
+					if (codigoLido == codigoDisciplina) {
+						// Substitui a linha antiga pelo novo conteúdo
+						linha = codigoDisciplina + ";" + newNome + ";" + newDiaSemana + ";" + newHorario + ";" + newQtdHorasDiarias + ";"
+								+ newCodigoCursoVinculado;
+						encontrado = true;
+
+						// Cria objeto atualizado para atualizar na hash
+
+						disciplinaAtualizada = new Disciplina(codigoDisciplina, newNome,newDiaSemana, newHorario, newQtdHorasDiarias, newCodigoCursoVinculado);
+
+					}
+				}
+				linhasAtualizadas.addLast(linha); // Adiciona a linha (atualizada ou não)
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo: " + e.getMessage());
+			return;
+		}
+
+		if (!encontrado) {
+			JOptionPane.showMessageDialog(null, "Disciplina com codigo " + codigoDisciplina + " não encontrado.");
+			return;
+		}
+
+		// Regrava o CSV com as linhas atualizadas
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas))) {
+			for (int i = 0; i < linhasAtualizadas.size(); i++) {
+				try {
+					writer.write(linhasAtualizadas.get(i));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				writer.newLine();
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar o arquivo: " + e.getMessage());
+			return;
+		}
+
+		// Atualiza na hash
+		tabHashDisciplinas.remover(new Disciplina(codigoDisciplina, "", "","", "", 0)); // remove pelo hash baseado no codigo
+		tabHashDisciplinas.inserir(disciplinaAtualizada); // insere o novo
+
+		JOptionPane.showMessageDialog(null, "Disciplina  atualizado com sucesso!");
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public class TelaDisciplinasController {
 		long codigoCurso = Long.parseLong(textField_codigoCurso.getText());
 
 		funcionarioController.cadastraDisciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias, codigoCurso);
-		
+		limparCampos();
 		
 	}
 	
@@ -74,12 +74,33 @@ public class TelaDisciplinasController {
 		    textField_horasDiarias.setText(String.valueOf(disciplina.getQtdHorasDiarias()));
 		    textField_codigoCurso.setText(String.valueOf(disciplina.getCodigoCurso()));
 		    
-		    limparCampos();
 		} else {
 		    JOptionPane.showMessageDialog(null, "Disciplina com codigo " + codigoDisciplina + " não encontrado.");
 		    limparCampos();
 		}
 
+
+	}
+	
+	public void chamarRemover() {
+		long codigoDisciplina = Long.parseLong(textField_disciplinaConsulta.getText());
+		FuncionarioController funcionarioController = new FuncionarioController();
+		
+		try {
+			
+			boolean sucesso = false;
+			try {
+				sucesso = funcionarioController.removerDisciplina(codigoDisciplina);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (sucesso) {
+				limparCampos();
+			}
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(null, "Digite um Codigo válido para remover.");
+		}
 
 	}
 	
@@ -92,6 +113,19 @@ public class TelaDisciplinasController {
 		}
 		
 		return valido;
+	}
+	
+	public void chamarAtualiza() {
+		long codigoDisciplina = Long.parseLong(textField_disciplinaConsulta.getText());
+		FuncionarioController funcionarioController = new FuncionarioController();
+	
+		String nome = textField_nomeDisciplina.getText();
+		String diaSemana = textField_diaSemana.getText();
+		String horario = textField_horaMinistrada.getText();
+		String horasDiarias = textField_horasDiarias.getText();
+		
+		funcionarioController.atualizarDisciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias, codigoDisciplina);
+		limparCampos();
 	}
 	
 	public boolean validaTela() {
@@ -121,6 +155,8 @@ public class TelaDisciplinasController {
 		textField_codigoCurso.setText("");
 
 	}
+
+	
 }
 
 
