@@ -5,15 +5,29 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+<<<<<<< Updated upstream
 import controller.TelaDisciplinasController;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+=======
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+>>>>>>> Stashed changes
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+<<<<<<< Updated upstream
+=======
+import controller.FuncionarioController;
+import controller.TelaDisciplinasController;
+import javax.swing.UIManager;
+
+>>>>>>> Stashed changes
 public class TelaDisciplinas extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -60,9 +74,15 @@ public class TelaDisciplinas extends JFrame {
 		lblNewLabel.setBounds(23, 24, 178, 17);
 		contentPane.add(lblNewLabel);
 
+<<<<<<< Updated upstream
 		JLabel lbl_IdDisciplina = new JLabel("Código da disciplina");
 		lbl_IdDisciplina.setBounds(23, 46, 172, 17);
 		contentPane.add(lbl_IdDisciplina);
+=======
+		JLabel lbl_codigoDisciplina = new JLabel("Código da disciplina");
+		lbl_codigoDisciplina.setBounds(23, 46, 172, 17);
+		contentPane.add(lbl_codigoDisciplina);
+>>>>>>> Stashed changes
 
 		textField_IdDisciplina = new JTextField();
 		textField_IdDisciplina.setBounds(23, 64, 172, 21);
@@ -134,15 +154,28 @@ public class TelaDisciplinas extends JFrame {
 		JLabel lblHorasDiarias = new JLabel("Quantidade de horas diárias");
 		lblHorasDiarias.setBounds(23, 222, 195, 21);
 		contentPane.add(lblHorasDiarias);
+<<<<<<< Updated upstream
 		
+=======
+
+>>>>>>> Stashed changes
 		textField_codigoCurso = new JTextField();
 		textField_codigoCurso.setColumns(10);
 		textField_codigoCurso.setBounds(23, 296, 172, 21);
 		contentPane.add(textField_codigoCurso);
+<<<<<<< Updated upstream
 		
 		JLabel lblCursoVinculado = new JLabel("Código do Curso vinculado");
 		lblCursoVinculado.setBounds(23, 275, 195, 21);
 		contentPane.add(lblCursoVinculado);
+=======
+
+		JLabel lblCursoVinculado = new JLabel("Código do Curso vinculado");
+		lblCursoVinculado.setBounds(23, 275, 195, 21);
+		contentPane.add(lblCursoVinculado);
+
+
+>>>>>>> Stashed changes
 		btnVoltar.addActionListener(new ActionListener() {
 
 			@Override
@@ -153,7 +186,67 @@ public class TelaDisciplinas extends JFrame {
 
 			}
 		});
+<<<<<<< Updated upstream
 
 		TelaDisciplinasController tdcontroller = new TelaDisciplinasController();
+=======
+		
+		
+		
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnRemover.setForeground(Color.WHITE);
+		btnRemover.setBackground(new Color(26, 95, 180));
+		btnRemover.setBounds(230, 328, 105, 27);
+		contentPane.add(btnRemover);
+		
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.setForeground(Color.WHITE);
+		btnAtualizar.setBackground(new Color(26, 95, 180));
+		btnAtualizar.setBounds(392, 328, 105, 27);
+		contentPane.add(btnAtualizar);
+		
+		TelaDisciplinasController telaDisciplinasController =
+		        new TelaDisciplinasController(
+		            textField_disciplinaConsulta,
+		            textField_IdDisciplina,
+		            textField_nomeDisciplina,
+		            textField_diaSemana,
+		            textField_horaMinistrada,
+		            textField_horasDiarias,
+		            textField_codigoCurso
+		        );
+
+		btnCadastrar.addActionListener(e ->{
+			if(telaDisciplinasController.validaTela()) {
+				telaDisciplinasController.chamarCadastroDisciplina();
+			}
+		});
+		
+		btnConsultar.addActionListener(e->{
+			if(telaDisciplinasController.validaConsulta()) {
+				telaDisciplinasController.chamarConsulta();
+			}
+		});
+		
+		btnRemover.addActionListener(e ->{
+			if(telaDisciplinasController.validaConsulta()) {
+				telaDisciplinasController.chamarRemover();
+			}
+		});
+		
+		btnAtualizar.addActionListener(e ->{
+			if(telaDisciplinasController.validaTela()) {
+				telaDisciplinasController.chamarAtualiza();
+			}
+		});
+		
+		
+		
+
+>>>>>>> Stashed changes
 	}
 }
