@@ -9,7 +9,10 @@ import javax.swing.JTextField;
 public class TelaCursosController implements ActionListener {
 	private JTextField textField_codigo;
 	private JTextField textField_nomeCurso;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	private JTextField textField_area;
 
 	public TelaCursosController(JTextField textField_codigo, JTextField textField_nomeCurso,
@@ -34,12 +37,21 @@ public class TelaCursosController implements ActionListener {
 		return valido;
 	}
 
+<<<<<<< Updated upstream
 	FuncionarioController func = new FuncionarioController();
+=======
+	FuncionarioController funcionarioController = new FuncionarioController();
+>>>>>>> Stashed changes
 
 	private void chamarCadastrarCurso() {
 		int codigo = Integer.parseInt(textField_codigo.getText());
 		String nome = textField_nomeCurso.getText();
+<<<<<<< Updated upstream
 		func.cadastraCurso(codigo, nome);
+=======
+		String area = textField_area.getText();
+		funcionarioController.cadastraCurso(codigo, nome, area);
+>>>>>>> Stashed changes
 
 	}
 

@@ -5,11 +5,22 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+<<<<<<< Updated upstream
 import controller.TelaCursosController;
+=======
+import controller.FuncionarioController;
+import controller.TelaCursosController;
+import model.Curso;
+import model.Professor;
+>>>>>>> Stashed changes
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+<<<<<<< Updated upstream
+=======
+import javax.swing.JOptionPane;
+>>>>>>> Stashed changes
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
@@ -21,7 +32,11 @@ public class TelaCursos extends JFrame {
 	private JTextField textField_codigo;
 	private JTextField textField_nomeCurso;
 	private JTextField textField_consultaCurso;
+<<<<<<< Updated upstream
 	private JTextField textField_Area;
+=======
+	private JTextField textField_area;
+>>>>>>> Stashed changes
 
 	/**
 	 * Launch the application.
@@ -80,6 +95,15 @@ public class TelaCursos extends JFrame {
 		btnCadastrar.setBackground(new Color(26, 95, 180));
 		btnCadastrar.setBounds(54, 227, 105, 27);
 		contentPane.add(btnCadastrar);
+<<<<<<< Updated upstream
+=======
+
+		TelaCursosController tccontroller = new TelaCursosController(textField_codigo, textField_nomeCurso,
+				textField_area);
+
+		btnCadastrar.addActionListener(tccontroller);
+		
+>>>>>>> Stashed changes
 		
 
 
@@ -111,10 +135,17 @@ public class TelaCursos extends JFrame {
 		lblAreaCurso.setBounds(23, 176, 172, 17);
 		contentPane.add(lblAreaCurso);
 
+<<<<<<< Updated upstream
 		textField_Area = new JTextField();
 		textField_Area.setColumns(10);
 		textField_Area.setBounds(23, 195, 172, 21);
 		contentPane.add(textField_Area);
+=======
+		textField_area = new JTextField();
+		textField_area.setColumns(10);
+		textField_area.setBounds(23, 195, 172, 21);
+		contentPane.add(textField_area);
+>>>>>>> Stashed changes
 		btnVoltar.addActionListener(new ActionListener() {
 
 			@Override
@@ -126,9 +157,93 @@ public class TelaCursos extends JFrame {
 			}
 		});
 		
+<<<<<<< Updated upstream
 		TelaCursosController tccontroller = new TelaCursosController(textField_codigo, textField_nomeCurso,
 				textField_Area);
 		btnCadastrar.addActionListener(tccontroller);
 
 	}
+=======
+		
+		JButton btnRemover = new JButton("Remover");
+		btnRemover.setForeground(Color.WHITE);
+		btnRemover.setBackground(new Color(0, 0, 255));
+		btnRemover.setBounds(172, 226, 117, 29);
+		contentPane.add(btnRemover);
+		
+		FuncionarioController funcionarioController =  new FuncionarioController();
+		
+		TelaCursosController telaCursosController =  new TelaCursosController(textField_codigo, textField_nomeCurso, textField_area);
+		
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.setBackground(new Color(14, 52, 255));
+		btnAtualizar.setForeground(Color.WHITE);
+		btnAtualizar.setBounds(300, 226, 117, 29);
+		contentPane.add(btnAtualizar);
+	
+		btnCadastrar.addActionListener(e ->{
+			telaCursosController.actionPerformed(e);
+			limparCampos();
+		});
+		
+		btnRemover.addActionListener(e -> {
+			try {
+				long codigoRemover = Long.parseLong(textField_codigo.getText().trim());
+				boolean sucesso = false;
+				try {
+					sucesso = funcionarioController.removeCurso(codigoRemover);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (sucesso) {
+					limparCampos();
+				}
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(null, "Digite um CPF válido para remover.");
+			}
+		});
+		
+		btnConsultar.addActionListener(e -> {
+		    try {
+		        long codigoCurso = Long.parseLong(textField_consultaCurso.getText().trim());  
+		        Curso curso = funcionarioController.buscarCursoPorCodigo(codigoCurso);
+
+		        if (curso != null) {
+		            textField_codigo.setText(Long.toString(curso.getCodigocodigo()));
+		            textField_nomeCurso.setText(curso.getNomeCurso());
+		            textField_area.setText(curso.getAreaCurso());
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Curso com código " + codigoCurso + " não encontrado.");
+		            limparCampos();
+		        }
+		    } catch (NumberFormatException ex) {
+		        JOptionPane.showMessageDialog(null, "Digite um código válido para consulta.");
+		    }
+		});
+		
+		btnAtualizar.addActionListener(e ->{
+				try {
+					long codigo = Long.parseLong(textField_consultaCurso.getText());
+					funcionarioController.atualizarCurso(codigo, textField_nomeCurso.getText(), textField_area.getText());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Digite um código válido para consulta e atualizacao.");
+				}
+
+			
+		});
+		
+		
+		
+
+	}
+
+	private void limparCampos() {
+		textField_codigo.setText("");
+		textField_nomeCurso.setText("");
+		textField_consultaCurso.setText("");
+		textField_area.setText("");// TODO Auto-generated method stub
+		
+	}
+>>>>>>> Stashed changes
 }

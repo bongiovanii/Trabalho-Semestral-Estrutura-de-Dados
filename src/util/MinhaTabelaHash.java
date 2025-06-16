@@ -11,89 +11,74 @@ public class MinhaTabelaHash<T> {
 	public MinhaTabelaHash(int tamanho) {
 		this.tamanho = tamanho;
 		tabela = new Lista[tamanho];
-
 		for (int i = 0; i < tamanho; i++) {
 			tabela[i] = new Lista<>();
 		}
 	}
 
 	private int calcularIndiceHash(T elemento) {
-		int hash = elemento.hashCode();
-		return Math.abs(hash) % tamanho;
+		int hashCode = elemento.hashCode();
+		return Math.abs(hashCode % tamanho);
 	}
 
 	public void inserir(T elemento) {
 		int indice = calcularIndiceHash(elemento);
-		Lista<T> lista = tabela[indice];
-
 		try {
-			if (!existe(lista, elemento)) {
-				lista.addLast(elemento);
-			} else {
-				System.out.println("Elemento já existe na tabela.");
+			// Verifica se já existe o elemento antes de adicionar
+			int tam = tabela[indice].size();
+			for (int i = 0; i < tam; i++) {
+				if (tabela[indice].get(i).equals(elemento)) {
+					return; // já existe, não insere duplicado
+				}
 			}
+			tabela[indice].addLast(elemento);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Erro ao inserir: " + e.getMessage());
 		}
 	}
 
 	public boolean buscar(T elemento) {
 		int indice = calcularIndiceHash(elemento);
-		Lista<T> lista = tabela[indice];
-
 		try {
-			int tamanhoLista = lista.size();
-			for (int i = 0; i < tamanhoLista; i++) {
-				T atual = lista.get(i);
-				if (atual.equals(elemento)) {
+			int tam = tabela[indice].size();
+			for (int i = 0; i < tam; i++) {
+				if (tabela[indice].get(i).equals(elemento)) {
 					return true;
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Erro ao buscar: " + e.getMessage());
 		}
-
 		return false;
 	}
 
-	public void remover(T elemento) {
+	public boolean remover(T elemento) {
 		int indice = calcularIndiceHash(elemento);
-		Lista<T> lista = tabela[indice];
-
 		try {
-			int tamanhoLista = lista.size();
-			for (int i = 0; i < tamanhoLista; i++) {
-				T atual = lista.get(i);
-				if (atual.equals(elemento)) {
-					lista.remove(i);
-					return;
+			int tam = tabela[indice].size();
+			for (int i = 0; i < tam; i++) {
+				if (tabela[indice].get(i).equals(elemento)) {
+					tabela[indice].remove(i);
+					return true;
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private boolean existe(Lista<T> lista, T elemento) throws Exception {
-		int tamanhoLista = lista.size();
-		for (int i = 0; i < tamanhoLista; i++) {
-			if (lista.get(i).equals(elemento)) {
-				return true;
-			}
+			System.err.println("Erro ao remover: " + e.getMessage());
 		}
 		return false;
 	}
 
+	// (Opcional) Para depuração
 	public void imprimirTabela() {
 		for (int i = 0; i < tamanho; i++) {
-			System.out.print("Índice " + i + ": ");
+			System.out.print("[" + i + "]: ");
 			try {
-				int tamanhoLista = tabela[i].size();
-				for (int j = 0; j < tamanhoLista; j++) {
+				int tam = tabela[i].size();
+				for (int j = 0; j < tam; j++) {
 					System.out.print(tabela[i].get(j) + " -> ");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.print("Erro ao imprimir");
 			}
 			System.out.println("null");
 		}

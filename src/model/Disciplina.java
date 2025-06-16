@@ -1,5 +1,6 @@
 package model;
 
+<<<<<<< Updated upstream
 public class Disciplina extends Curso {
 	private int codigoDisciplina;
 	private String diaSemana;
@@ -22,6 +23,36 @@ public class Disciplina extends Curso {
 	}
 
 	public int getCodigoDisciplina() {
+=======
+public class Disciplina {
+	private long codigoDisciplina;
+	private String diaSemana;
+	private String horario;
+	private String qtdHorasDiarias;
+	private String nomeDisciplina;
+	private long codigoCurso;
+
+	public Disciplina(long codigoDisciplina, String nomeDisciplina, String diaSemana, String horario,
+			String qtdHorasDiarias, long codigoCurso) {
+		super();
+		this.codigoDisciplina = codigoDisciplina;
+		this.diaSemana = diaSemana;
+		this.horario = horario;
+		this.qtdHorasDiarias = qtdHorasDiarias;
+		this.nomeDisciplina = nomeDisciplina;
+		this.codigoCurso = codigoCurso;
+	}
+
+	public long getCodigoCurso() {
+		return codigoCurso;
+	}
+
+	public void setCodigoCurso(long codigoCurso) {
+		this.codigoCurso = codigoCurso;
+	}
+
+	public long getCodigoDisciplina() {
+>>>>>>> Stashed changes
 		return codigoDisciplina;
 	}
 
@@ -45,11 +76,19 @@ public class Disciplina extends Curso {
 		this.horario = horario;
 	}
 
+<<<<<<< Updated upstream
 	public int getQtdHorasDiarias() {
 		return qtdHorasDiarias;
 	}
 
 	public void setQtdHorasDiarias(int qtdHorasDiarias) {
+=======
+	public String getQtdHorasDiarias() {
+		return qtdHorasDiarias;
+	}
+
+	public void setQtdHorasDiarias(String qtdHorasDiarias) {
+>>>>>>> Stashed changes
 		this.qtdHorasDiarias = qtdHorasDiarias;
 	}
 
