@@ -1,3 +1,4 @@
+
 package view;
 
 import java.awt.EventQueue;
@@ -5,6 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import view.TelaCursos;
+import view.TelaDisciplinas;
+import view.TelaProcessos;
+import view.TelaProfessores;
+
 import java.awt.Color;
 import javax.swing.JMenu;
 import javax.swing.JButton;
