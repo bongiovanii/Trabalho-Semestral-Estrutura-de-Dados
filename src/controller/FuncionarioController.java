@@ -21,11 +21,17 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	private MinhaTabelaHash<Curso> tabHashCurso;
 	private MinhaTabelaHash<Disciplina> tabHashDisciplinas;
 
-	private final String caminhoArquivo = "C:\\TEMP\\professor.csv";
-	private final String caminhoArquivoCursos = "C:\\TEMP\\cursos.csv";
-	private final String caminhoArquivoDisciplinas = "C:\\TEMP\\disciplinas.csv";
+	private final String caminhoDisciplinas = "C:\\TEMP\\disciplinas.csv";
+	private final String caminhoProfessores = "C:\\TEMP\\professor.csv";
+	private final String caminhoCursos = "C:\\TEMP\\cursos.csv";
 
 	public FuncionarioController() {
+		File tempDir = new File("C:\\TEMP");
+		if (!tempDir.exists()) {
+			tempDir.mkdirs(); // Cria o diretório se não existir
+			JOptionPane.showMessageDialog(null, "Diretório C:\\TEMP criado com sucesso!");
+		}
+
 		tabHashProfessor = new MinhaTabelaHash<>(53);
 		carregarProfessoresCSV();
 
@@ -49,7 +55,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Verifica se já existe no arquivo CSV (verificação de segurança)
 		boolean jaExisteNoArquivo = false;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoProfessores))) {
 			String linha;
 			while ((linha = reader.readLine()) != null) {
 				String[] partes = linha.split(";");
@@ -72,7 +78,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Insere na hash e no arquivo
 		tabHashProfessor.inserir(novoProfessor);
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivo, true))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoProfessores, true))) {
 			String linha = cpfProfessor + ";" + nome + ";" + area + ";" + pontos;
 			writer.write(linha);
 			writer.newLine();
@@ -89,7 +95,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean encontrado = false;
 		Professor professorParaRemover = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoProfessores))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -122,7 +128,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 			return false;
 		}
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoProfessores))) {
 			int total = linhasMantidas.size();
 			for (int i = 0; i < total; i++) {
 				writer.write(linhasMantidas.get(i));
@@ -158,7 +164,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	public Professor buscarProfessorPorCpf(long cpf) {
-		File arquivo = new File(caminhoArquivo);
+		File arquivo = new File(caminhoProfessores);
 
 		if (!arquivo.exists()) {
 			JOptionPane.showMessageDialog(null, "Arquivo de professores não encontrado!");
@@ -195,7 +201,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean encontrado = false;
 		Professor professorAtualizado = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoProfessores))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -226,7 +232,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		}
 
 		// Regrava o CSV com as linhas atualizadas
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivo))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoProfessores))) {
 			for (int i = 0; i < linhasAtualizadas.size(); i++) {
 				writer.write(linhasAtualizadas.get(i));
 				writer.newLine();
@@ -274,7 +280,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Verifica se já existe no arquivo CSV (verificação de segurança)
 		boolean jaExisteNoArquivo = false;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoDisciplinas))) {
 			String linha;
 			while ((linha = reader.readLine()) != null) {
 				String[] partes = linha.split(";");
@@ -297,7 +303,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Insere na hash e no arquivo
 		tabHashDisciplinas.inserir(novaDisciplina);
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas, true))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoDisciplinas, true))) {
 			String linha = codigoDisciplina + ";" + nome + ";" + diaSemana + ";" + horario + ";" + qtdHorasDiarias + ";"
 					+ codigoCursoVinculado;
 			writer.write(linha);
@@ -316,7 +322,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean encontrado = false;
 		Disciplina disciplinaParaRemover = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoDisciplinas))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoDisciplinas))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -338,9 +344,9 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 						String horasDiarias = partes[4].trim();
 						long codigoCursoVinculado = Long.parseLong(partes[5]);
 
-						disciplinaParaRemover = new Disciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias, codigoCursoVinculado);
-						
-						
+						disciplinaParaRemover = new Disciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias,
+								codigoCursoVinculado);
+
 						encontrado = true;
 					}
 				}
@@ -355,7 +361,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 			return false;
 		}
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoDisciplinas))) {
 			int total = linhasMantidas.size();
 			for (int i = 0; i < total; i++) {
 				writer.write(linhasMantidas.get(i));
@@ -394,7 +400,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	public Disciplina buscarDisciplinaPorCodigo(long codigoDisciplina) {
-		File arquivo = new File(caminhoArquivoDisciplinas);
+		File arquivo = new File(caminhoDisciplinas);
 
 		if (!arquivo.exists()) {
 			JOptionPane.showMessageDialog(null, "Arquivo de disciplinas não encontrado!");
@@ -428,14 +434,14 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 
 		return null; // caso não encontre
 	}
-	
+
 	public void atualizarDisciplina(long codigoDisciplina, String newNome, String newDiaSemana, String newHorario,
 			String newQtdHorasDiarias, long newCodigoCursoVinculado) {
 		Lista<String> linhasAtualizadas = new Lista<>();
 		boolean encontrado = false;
 		Disciplina disciplinaAtualizada = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoDisciplinas))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoDisciplinas))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -446,13 +452,14 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 
 					if (codigoLido == codigoDisciplina) {
 						// Substitui a linha antiga pelo novo conteúdo
-						linha = codigoDisciplina + ";" + newNome + ";" + newDiaSemana + ";" + newHorario + ";" + newQtdHorasDiarias + ";"
-								+ newCodigoCursoVinculado;
+						linha = codigoDisciplina + ";" + newNome + ";" + newDiaSemana + ";" + newHorario + ";"
+								+ newQtdHorasDiarias + ";" + newCodigoCursoVinculado;
 						encontrado = true;
 
 						// Cria objeto atualizado para atualizar na hash
 
-						disciplinaAtualizada = new Disciplina(codigoDisciplina, newNome,newDiaSemana, newHorario, newQtdHorasDiarias, newCodigoCursoVinculado);
+						disciplinaAtualizada = new Disciplina(codigoDisciplina, newNome, newDiaSemana, newHorario,
+								newQtdHorasDiarias, newCodigoCursoVinculado);
 
 					}
 				}
@@ -469,7 +476,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		}
 
 		// Regrava o CSV com as linhas atualizadas
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoDisciplinas))) {
 			for (int i = 0; i < linhasAtualizadas.size(); i++) {
 				try {
 					writer.write(linhasAtualizadas.get(i));
@@ -485,7 +492,8 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		}
 
 		// Atualiza na hash
-		tabHashDisciplinas.remover(new Disciplina(codigoDisciplina, "", "","", "", 0)); // remove pelo hash baseado no codigo
+		tabHashDisciplinas.remover(new Disciplina(codigoDisciplina, "", "", "", "", 0)); // remove pelo hash baseado no
+																							// codigo
 		tabHashDisciplinas.inserir(disciplinaAtualizada); // insere o novo
 
 		JOptionPane.showMessageDialog(null, "Disciplina  atualizado com sucesso!");
@@ -504,7 +512,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Verifica se já existe no arquivo CSV (verificação de segurança)
 		boolean jaExisteNoArquivo = false;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoCursos))) {
 
 			String linha;
 			while ((linha = reader.readLine()) != null) {
@@ -528,7 +536,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Insere na hash e no arquivo
 		tabHashCurso.inserir(novoCurso);
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos, true))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoCursos, true))) {
 			System.out.print("Codigo: " + codigoCurso + " Nome: " + nomeCurso + " Area: " + areaCurso);
 
 			String linha = codigoCurso + ";" + nomeCurso + ";" + areaCurso;
@@ -548,7 +556,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean encontrado = false;
 		Curso cursoParaRemover = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoCursos))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -583,7 +591,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 			return false;
 		}
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoCursos))) {
 			int total = linhasMantidas.size();
 			for (int i = 0; i < total; i++) {
 				writer.write(linhasMantidas.get(i));
@@ -620,7 +628,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	public Curso buscarCursoPorCodigo(long codigoCurso) {
-		File arquivo = new File(caminhoArquivoCursos);
+		File arquivo = new File(caminhoCursos);
 
 		if (!arquivo.exists()) {
 			JOptionPane.showMessageDialog(null, "Arquivo de cursos não encontrado!");
@@ -657,7 +665,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean encontrado = false;
 		Curso cursoAtualizado = null;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoCursos))) {
 			String linha;
 
 			while ((linha = reader.readLine()) != null) {
@@ -690,7 +698,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		}
 
 		// Regrava o CSV com as linhas atualizadas
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoCursos))) {
 			for (int i = 0; i < linhasAtualizadas.size(); i++) {
 				writer.write(linhasAtualizadas.get(i));
 				writer.newLine();
@@ -708,87 +716,109 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	public void carregarProfessoresCSV() {
-		File arquivo = new File(caminhoArquivo);
-
-		if (!arquivo.exists()) {
-			return;
-		}
-
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
-			String linha;
-
-			while ((linha = reader.readLine()) != null) {
-				String[] partes = linha.split(";");
-				if (partes.length == 4) {
-					long cpf = Long.parseLong(partes[0].trim());
-					String nome = partes[1].trim();
-					String area = partes[2].trim();
-					int pontos = Integer.parseInt(partes[3].trim());
-
-					Professor professor = new Professor(cpf, nome, area, pontos);
-					tabHashProfessor.inserir(professor);
+		File arquivo = new File(caminhoProfessores);
+		try {
+			if (!arquivo.exists()) {
+				if (!arquivo.exists()) {
+					arquivo.createNewFile(); // Cria arquivo vazio se não existir
+					return;
 				}
 			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar professores do CSV: " + e.getMessage());
+			try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+				String linha;
+
+				while ((linha = reader.readLine()) != null) {
+					String[] partes = linha.split(";");
+					if (partes.length == 4) {
+						long cpf = Long.parseLong(partes[0].trim());
+						String nome = partes[1].trim();
+						String area = partes[2].trim();
+						int pontos = Integer.parseInt(partes[3].trim());
+
+						Professor professor = new Professor(cpf, nome, area, pontos);
+						tabHashProfessor.inserir(professor);
+					}
+				}
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Erro ao carregar professores do CSV: " + e.getMessage());
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+
+		
 	}
 
 	public void carregarCursosCSV() {
-		File arquivo = new File(caminhoArquivoCursos);
+		File arquivo = new File(caminhoCursos);
 
-		if (!arquivo.exists()) {
-			return;
-		}
+		  
+	    try {
+	        if (!arquivo.exists()) {
+	            arquivo.createNewFile(); // Cria arquivo vazio se não existir
+	            return;
+	        }
+	        
+	        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+				String linha;
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
-			String linha;
+				while ((linha = reader.readLine()) != null) {
+					String[] partes = linha.split(";");
+					if (partes.length == 3) {
+						long codigo = Long.parseLong(partes[0].trim());
+						String nome = partes[1].trim();
+						String area = partes[2].trim();
 
-			while ((linha = reader.readLine()) != null) {
-				String[] partes = linha.split(";");
-				if (partes.length == 3) {
-					long codigo = Long.parseLong(partes[0].trim());
-					String nome = partes[1].trim();
-					String area = partes[2].trim();
-
-					Curso curso = new Curso(codigo, nome, area);
-					tabHashCurso.inserir(curso);
+						Curso curso = new Curso(codigo, nome, area);
+						tabHashCurso.inserir(curso);
+					}
 				}
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Erro ao carregar cursos do CSV: " + e.getMessage());
 			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar cursos do CSV: " + e.getMessage());
-		}
+	    } catch (IOException e) {
+	        JOptionPane.showMessageDialog(null, "Erro ao criar/ler arquivo de professores: " + e.getMessage());
+	    }
+
+		
 	}
 
 	public void carregarDisciplinasCSV() {
-		File arquivo = new File(caminhoArquivoDisciplinas);
+		File arquivo = new File(caminhoDisciplinas);
+		 try {
+		        if (!arquivo.exists()) {
+		            arquivo.createNewFile(); // Cria arquivo vazio se não existir
+		            return;
+		        }
+		        
+		        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+					String linha;
 
-		if (!arquivo.exists()) {
-			return;
-		}
+					while ((linha = reader.readLine()) != null) {
+						String[] partes = linha.split(";");
+						if (partes.length == 6) {
+							long codigo = Long.parseLong(partes[0].trim());
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
-			String linha;
+							String nome = partes[1].trim();
+							String diaSemana = partes[2].trim();
+							String horario = partes[3].trim();
+							String horasDiarias = partes[4].trim();
+							long codigoCursoVinculado = Long.parseLong(partes[5]);
 
-			while ((linha = reader.readLine()) != null) {
-				String[] partes = linha.split(";");
-				if (partes.length == 6) {
-					long codigo = Long.parseLong(partes[0].trim());
-
-					String nome = partes[1].trim();
-					String diaSemana = partes[2].trim();
-					String horario = partes[3].trim();
-					String horasDiarias = partes[4].trim();
-					long codigoCursoVinculado = Long.parseLong(partes[5]);
-
-					Disciplina disci = new Disciplina(codigo, nome, diaSemana, horario, horasDiarias,
-							codigoCursoVinculado);
-					tabHashDisciplinas.inserir(disci);
+							Disciplina disci = new Disciplina(codigo, nome, diaSemana, horario, horasDiarias,
+									codigoCursoVinculado);
+							tabHashDisciplinas.inserir(disci);
+						}
+					}
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Erro ao carregar disciplinas do CSV: " + e.getMessage());
 				}
-			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar disciplinas do CSV: " + e.getMessage());
-		}
+		    } catch (IOException e) {
+		        JOptionPane.showMessageDialog(null, "Erro ao criar/ler arquivo de professores: " + e.getMessage());
+		    }
+
+		
 	}
 
 }
