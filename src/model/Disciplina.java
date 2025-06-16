@@ -1,31 +1,33 @@
 package model;
 
 public class Disciplina {
-	private int codigoDisciplina;
+	private long codigoDisciplina;
 	private String diaSemana;
 	private String horario;
-	private int qtdHorasDiarias;
+	private String qtdHorasDiarias;
 	private String nomeDisciplina;
-	private int codigoCurso;
-	
-	
-	
+	private long codigoCurso;
 
-	public Disciplina() {
+	public Disciplina(long codigoDisciplina, String nomeDisciplina, String diaSemana, String horario,
+			String qtdHorasDiarias, long codigoCurso) {
 		super();
-	
-	}
-
-	public int getCodigoCurso() {
-		return codigoCurso;
-	}
-
-	public void setCodigoCurso(int codigoCurso) {
+		this.codigoDisciplina = codigoDisciplina;
+		this.diaSemana = diaSemana;
+		this.horario = horario;
+		this.qtdHorasDiarias = qtdHorasDiarias;
+		this.nomeDisciplina = nomeDisciplina;
 		this.codigoCurso = codigoCurso;
 	}
 
+	public long getCodigoCurso() {
+		return codigoCurso;
+	}
 
-	public int getCodigoDisciplina() {
+	public void setCodigoCurso(long codigoCurso) {
+		this.codigoCurso = codigoCurso;
+	}
+
+	public long getCodigoDisciplina() {
 		return codigoDisciplina;
 	}
 
@@ -49,11 +51,11 @@ public class Disciplina {
 		this.horario = horario;
 	}
 
-	public int getQtdHorasDiarias() {
+	public String getQtdHorasDiarias() {
 		return qtdHorasDiarias;
 	}
 
-	public void setQtdHorasDiarias(int qtdHorasDiarias) {
+	public void setQtdHorasDiarias(String qtdHorasDiarias) {
 		this.qtdHorasDiarias = qtdHorasDiarias;
 	}
 

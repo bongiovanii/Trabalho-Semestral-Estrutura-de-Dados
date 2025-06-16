@@ -16,19 +16,24 @@ import model.Professor;
 public class FuncionarioController implements IProfessor, IInscricao, IDisciplinas, ICursos {
 
 	private Professor professor = new Professor();
-	private Disciplina disciplina = new Disciplina();
 	private Lista<Object> inscricoes = new Lista<>();
 	private MinhaTabelaHash<Professor> tabHashProfessor;
 	private MinhaTabelaHash<Curso> tabHashCurso;
+	private MinhaTabelaHash<Disciplina> tabHashDisciplinas;
 
 	private final String caminhoArquivo = "C:\\TEMP\\professor.csv";
 	private final String caminhoArquivoCursos = "C:\\TEMP\\cursos.csv";
+	private final String caminhoArquivoDisciplinas = "C:\\TEMP\\disciplinas.csv";
 
 	public FuncionarioController() {
 		tabHashProfessor = new MinhaTabelaHash<>(53);
 		carregarProfessoresCSV();
-		
+
 		tabHashCurso = new MinhaTabelaHash<>(53);
+		carregarCursosCSV();
+
+		tabHashDisciplinas = new MinhaTabelaHash<>(53);
+		carregarDisciplinasCSV();
 	}
 
 	@Override
@@ -76,34 +81,6 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 			JOptionPane.showMessageDialog(null, "Erro ao salvar no arquivo CSV!");
 		}
 
-
-	}
-
-	public void carregarProfessoresCSV() {
-		File arquivo = new File(caminhoArquivo);
-
-		if (!arquivo.exists()) {
-			return;
-		}
-
-		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
-			String linha;
-
-			while ((linha = reader.readLine()) != null) {
-				String[] partes = linha.split(";");
-				if (partes.length == 4) {
-					long cpf = Long.parseLong(partes[0].trim());
-					String nome = partes[1].trim();
-					String area = partes[2].trim();
-					int pontos = Integer.parseInt(partes[3].trim());
-
-					Professor professor = new Professor(cpf, nome, area, pontos);
-					tabHashProfessor.inserir(professor);
-				}
-			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar professores do CSV: " + e.getMessage());
-		}
 	}
 
 	@Override
@@ -275,18 +252,62 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		// Aqui você pode montar a lógica de criar um objeto e salvar na lista
 		// 'inscricoes'
 	}
-	
+
 	@Override
 	public void removeInscricao(int codigoProcesso) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-
 	@Override
-	public void cadastraDisciplina(int codigo, String diaSemana, String horario, int qtdDiasSemana) {
-		// TODO: implementar cadastro de disciplina
+	public void cadastraDisciplina(long codigoDisciplina, String nome, String diaSemana, String horario,
+			String qtdHorasDiarias, long codigoCursoVinculado) {
+		Disciplina novaDisciplina = new Disciplina(codigoDisciplina, nome, diaSemana, horario, qtdHorasDiarias,
+				codigoCursoVinculado);
+
+		// Verifica se já existe na tabela hash
+		if (tabHashDisciplinas.buscar(novaDisciplina)) {
+			JOptionPane.showMessageDialog(null, "Disciplina já cadastrada (Hash).");
+			return;
+		}
+
+		// Verifica se já existe no arquivo CSV (verificação de segurança)
+		boolean jaExisteNoArquivo = false;
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+			String linha;
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+				if (partes.length >= 1) {
+					long codigoExistente = Long.parseLong(partes[0].trim());
+					if (codigoExistente == codigoDisciplina) {
+						jaExisteNoArquivo = true;
+						break;
+					}
+				}
+			}
+		} catch (IOException e) {
+		}
+
+		if (jaExisteNoArquivo) {
+			JOptionPane.showMessageDialog(null, "Disciplina já cadastrado (Arquivo).");
+			return;
+		}
+
+		// Insere na hash e no arquivo
+		tabHashDisciplinas.inserir(novaDisciplina);
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoDisciplinas, true))) {
+			String linha = codigoDisciplina + ";" + nome + ";" + diaSemana + ";" + horario + ";" + qtdHorasDiarias + ";"
+					+ codigoCursoVinculado;
+			writer.write(linha);
+			writer.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Erro ao salvar no arquivo CSV!");
+		}
+		JOptionPane.showMessageDialog(null, "Disciplina " + nome + " cadastrada com sucesso!");
+
 	}
 
 	@Override
@@ -295,14 +316,59 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 	}
 
 	@Override
-	public void consultarDisciplina(Disciplina disciplina) {
-		// TODO: implementar consulta de disciplina
+	public void consultarDisciplina(long codigoDisciplina) {
+		Disciplina disci = buscarDisciplinaPorCodigo(codigoDisciplina);
+
+		if (disci != null) {
+			JOptionPane.showMessageDialog(null,
+					"Codigo Disciplina: " + disci.getCodigoDisciplina() + "\nNome: " + disci.getNomeDisciplina()
+							+ "\nDia da Semana ministrado: " + disci.getDiaSemana() + "\nHorario: " + disci.getHorario()
+							+ "\nQuantidade de horas diárias: " + disci.getQtdHorasDiarias()
+							+ "\nCodigo do curso vinculado: " + disci.getCodigoCurso());
+		} else {
+			JOptionPane.showMessageDialog(null, "Disciplina com codigo" + codigoDisciplina + " não encontrado.");
+		}
+	}
+
+	public Disciplina buscarDisciplinaPorCodigo(long codigoDisciplina) {
+		File arquivo = new File(caminhoArquivoDisciplinas);
+
+		if (!arquivo.exists()) {
+			JOptionPane.showMessageDialog(null, "Arquivo de disciplinas não encontrado!");
+			return null;
+		}
+
+		try (Scanner scanner = new Scanner(arquivo)) {
+			while (scanner.hasNextLine()) {
+				String linha = scanner.nextLine();
+				String[] dados = linha.split(";");
+
+				if (dados.length == 6) {
+					long codigoLido = Long.parseLong(dados[0]);
+
+					if (codigoLido == codigoDisciplina) {
+						String nome = dados[1];
+						String diaSemana = dados[2];
+						String horario = dados[3];
+						String horasDiarias = dados[4];
+						long codigoCursoVinculado = Long.parseLong(dados[5]);
+
+						Disciplina disci = new Disciplina(codigoDisciplina, nome, diaSemana, horario, horasDiarias,
+								codigoCursoVinculado);
+						return disci;
+					}
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo de disciplinas: " + e.getMessage());
+		}
+
+		return null; // caso não encontre
 	}
 
 	@Override
 	public void cadastraCurso(long codigoCurso, String nomeCurso, String areaCurso) {
-		Curso novoCurso = new Curso(codigoCurso,nomeCurso,areaCurso);
-	
+		Curso novoCurso = new Curso(codigoCurso, nomeCurso, areaCurso);
 
 		// Verifica se já existe na tabela hash
 		if (tabHashCurso.buscar(novoCurso)) {
@@ -314,7 +380,7 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		boolean jaExisteNoArquivo = false;
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
-			
+
 			String linha;
 			while ((linha = reader.readLine()) != null) {
 				String[] partes = linha.split(";");
@@ -339,8 +405,8 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos, true))) {
 			System.out.print("Codigo: " + codigoCurso + " Nome: " + nomeCurso + " Area: " + areaCurso);
-			
-			String linha = codigoCurso + ";" + nomeCurso + ";" + areaCurso  ;
+
+			String linha = codigoCurso + ";" + nomeCurso + ";" + areaCurso;
 			writer.write(linha);
 			writer.newLine();
 		} catch (IOException e) {
@@ -371,14 +437,13 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 						linhasMantidas.addLast(linha);
 					} else {
 						// Codigo do curso igual: este Curso será removido
-						
+
 						long codigo = Long.parseLong(partes[0].trim());
 						String nome = partes[1].trim();
-						String area  = partes[2].trim();
-						
+						String area = partes[2].trim();
 
-						cursoParaRemover = new Curso(codigo,nome,area);
-						
+						cursoParaRemover = new Curso(codigo, nome, area);
+
 						encontrado = true;
 					}
 				}
@@ -421,99 +486,184 @@ public class FuncionarioController implements IProfessor, IInscricao, IDisciplin
 		Curso curso = buscarCursoPorCodigo(codigoCurso);
 
 		if (curso != null) {
-			JOptionPane.showMessageDialog(null, "Curso: " + curso.getNomeCurso()+ "\nCodigo: " + curso.getCodigocodigo());
-				
+			JOptionPane.showMessageDialog(null,
+					"Curso: " + curso.getNomeCurso() + "\nCodigo: " + curso.getCodigocodigo());
+
 		} else {
 			JOptionPane.showMessageDialog(null, "Curso com codigo " + codigoCurso + " não encontrado.");
 		}
 	}
 
 	public Curso buscarCursoPorCodigo(long codigoCurso) {
-	    File arquivo = new File(caminhoArquivoCursos);
+		File arquivo = new File(caminhoArquivoCursos);
 
-	    if (!arquivo.exists()) {
-	        JOptionPane.showMessageDialog(null, "Arquivo de cursos não encontrado!");
-	        return null;
-	    }
-
-	    try (Scanner scanner = new Scanner(arquivo)) {
-	        while (scanner.hasNextLine()) {
-	            String linha = scanner.nextLine();
-	            String[] dados = linha.split(";");
-
-	            if (dados.length >= 3) {  // 
-	                long codigoLido = Long.parseLong(dados[0].trim());  // Índice 0 para código
-
-	                if (codigoLido == codigoCurso) {
-	                    String nome = dados[1].trim();    // Índice 1 para nome
-	                    String area = dados[2].trim();    // Índice 2 para área
-	                    
-	                    Curso curso = new Curso(codigoLido,nome,area);
-	                    
-	                    return curso;
-	                }
-	            }
-	        }
-	    } catch (Exception e) {
-	        JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo de cursos: " + e.getMessage());
-	    }
-
-	    return null;
-	}
-	
-	public void atualizarCurso(long codigoCurso, String novoNomeCurso, String novaAreaCurso) throws Exception {
-			Lista<String> linhasAtualizadas = new Lista<>();
-			boolean encontrado = false;
-			Curso cursoAtualizado = null;
-
-			try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
-				String linha;
-
-				while ((linha = reader.readLine()) != null) {
-					String[] partes = linha.split(";");
-
-					if (partes.length == 3) {
-						long codigoLido = Long.parseLong(partes[0].trim());
-
-						if (codigoLido == codigoCurso) {
-							// Substitui a linha antiga pelo novo conteúdo
-							linha = codigoCurso + ";" + novoNomeCurso + ";" + novaAreaCurso;
-							encontrado = true;
-
-							// Cria objeto atualizado para atualizar na hash
-							
-							cursoAtualizado = new Curso(codigoCurso, novoNomeCurso, novaAreaCurso);
-						
-						}
-					}
-					linhasAtualizadas.addLast(linha); // Adiciona a linha (atualizada ou não)
-				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo: " + e.getMessage());
-				return;
-			}
-
-			if (!encontrado) {
-				JOptionPane.showMessageDialog(null, "Curso com codigo " + codigoCurso + " não encontrado.");
-				return;
-			}
-
-			// Regrava o CSV com as linhas atualizadas
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos))) {
-				for (int i = 0; i < linhasAtualizadas.size(); i++) {
-					writer.write(linhasAtualizadas.get(i));
-					writer.newLine();
-				}
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Erro ao atualizar o arquivo: " + e.getMessage());
-				return;
-			}
-
-			// Atualiza na hash
-			tabHashCurso.remover(new Curso(codigoCurso, "", "")); // remove pelo hash baseado no codigo
-			tabHashCurso.inserir(cursoAtualizado); // insere o novo
-
-			JOptionPane.showMessageDialog(null, "Curso atualizado com sucesso!");
+		if (!arquivo.exists()) {
+			JOptionPane.showMessageDialog(null, "Arquivo de cursos não encontrado!");
+			return null;
 		}
-	
+
+		try (Scanner scanner = new Scanner(arquivo)) {
+			while (scanner.hasNextLine()) {
+				String linha = scanner.nextLine();
+				String[] dados = linha.split(";");
+
+				if (dados.length >= 3) { //
+					long codigoLido = Long.parseLong(dados[0].trim()); // Índice 0 para código
+
+					if (codigoLido == codigoCurso) {
+						String nome = dados[1].trim(); // Índice 1 para nome
+						String area = dados[2].trim(); // Índice 2 para área
+
+						Curso curso = new Curso(codigoLido, nome, area);
+
+						return curso;
+					}
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo de cursos: " + e.getMessage());
+		}
+
+		return null;
+	}
+
+	public void atualizarCurso(long codigoCurso, String novoNomeCurso, String novaAreaCurso) throws Exception {
+		Lista<String> linhasAtualizadas = new Lista<>();
+		boolean encontrado = false;
+		Curso cursoAtualizado = null;
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivoCursos))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+
+				if (partes.length == 3) {
+					long codigoLido = Long.parseLong(partes[0].trim());
+
+					if (codigoLido == codigoCurso) {
+						// Substitui a linha antiga pelo novo conteúdo
+						linha = codigoCurso + ";" + novoNomeCurso + ";" + novaAreaCurso;
+						encontrado = true;
+
+						// Cria objeto atualizado para atualizar na hash
+
+						cursoAtualizado = new Curso(codigoCurso, novoNomeCurso, novaAreaCurso);
+
+					}
+				}
+				linhasAtualizadas.addLast(linha); // Adiciona a linha (atualizada ou não)
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao ler o arquivo: " + e.getMessage());
+			return;
+		}
+
+		if (!encontrado) {
+			JOptionPane.showMessageDialog(null, "Curso com codigo " + codigoCurso + " não encontrado.");
+			return;
+		}
+
+		// Regrava o CSV com as linhas atualizadas
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(caminhoArquivoCursos))) {
+			for (int i = 0; i < linhasAtualizadas.size(); i++) {
+				writer.write(linhasAtualizadas.get(i));
+				writer.newLine();
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar o arquivo: " + e.getMessage());
+			return;
+		}
+
+		// Atualiza na hash
+		tabHashCurso.remover(new Curso(codigoCurso, "", "")); // remove pelo hash baseado no codigo
+		tabHashCurso.inserir(cursoAtualizado); // insere o novo
+
+		JOptionPane.showMessageDialog(null, "Curso atualizado com sucesso!");
+	}
+
+	public void carregarProfessoresCSV() {
+		File arquivo = new File(caminhoArquivo);
+
+		if (!arquivo.exists()) {
+			return;
+		}
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+				if (partes.length == 4) {
+					long cpf = Long.parseLong(partes[0].trim());
+					String nome = partes[1].trim();
+					String area = partes[2].trim();
+					int pontos = Integer.parseInt(partes[3].trim());
+
+					Professor professor = new Professor(cpf, nome, area, pontos);
+					tabHashProfessor.inserir(professor);
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao carregar professores do CSV: " + e.getMessage());
+		}
+	}
+
+	public void carregarCursosCSV() {
+		File arquivo = new File(caminhoArquivoCursos);
+
+		if (!arquivo.exists()) {
+			return;
+		}
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+				if (partes.length == 3) {
+					long codigo = Long.parseLong(partes[0].trim());
+					String nome = partes[1].trim();
+					String area = partes[2].trim();
+
+					Curso curso = new Curso(codigo, nome, area);
+					tabHashCurso.inserir(curso);
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao carregar cursos do CSV: " + e.getMessage());
+		}
+	}
+
+	public void carregarDisciplinasCSV() {
+		File arquivo = new File(caminhoArquivoDisciplinas);
+
+		if (!arquivo.exists()) {
+			return;
+		}
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+			String linha;
+
+			while ((linha = reader.readLine()) != null) {
+				String[] partes = linha.split(";");
+				if (partes.length == 6) {
+					long codigo = Long.parseLong(partes[0].trim());
+
+					String nome = partes[1].trim();
+					String diaSemana = partes[2].trim();
+					String horario = partes[3].trim();
+					String horasDiarias = partes[4].trim();
+					long codigoCursoVinculado = Long.parseLong(partes[5]);
+
+					Disciplina disci = new Disciplina(codigo, nome, diaSemana, horario, horasDiarias,
+							codigoCursoVinculado);
+					tabHashDisciplinas.inserir(disci);
+				}
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao carregar disciplinas do CSV: " + e.getMessage());
+		}
+	}
+
 }

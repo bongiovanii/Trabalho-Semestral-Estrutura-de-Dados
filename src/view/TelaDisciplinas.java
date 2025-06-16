@@ -5,14 +5,16 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import controller.TelaDisciplinasController;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import controller.FuncionarioController;
+import controller.TelaDisciplinasController;
 
 public class TelaDisciplinas extends JFrame {
 
@@ -60,9 +62,9 @@ public class TelaDisciplinas extends JFrame {
 		lblNewLabel.setBounds(23, 24, 178, 17);
 		contentPane.add(lblNewLabel);
 
-		JLabel lbl_IdDisciplina = new JLabel("Código da disciplina");
-		lbl_IdDisciplina.setBounds(23, 46, 172, 17);
-		contentPane.add(lbl_IdDisciplina);
+		JLabel lbl_codigoDisciplina = new JLabel("Código da disciplina");
+		lbl_codigoDisciplina.setBounds(23, 46, 172, 17);
+		contentPane.add(lbl_codigoDisciplina);
 
 		textField_IdDisciplina = new JTextField();
 		textField_IdDisciplina.setBounds(23, 64, 172, 21);
@@ -134,15 +136,17 @@ public class TelaDisciplinas extends JFrame {
 		JLabel lblHorasDiarias = new JLabel("Quantidade de horas diárias");
 		lblHorasDiarias.setBounds(23, 222, 195, 21);
 		contentPane.add(lblHorasDiarias);
-		
+
 		textField_codigoCurso = new JTextField();
 		textField_codigoCurso.setColumns(10);
 		textField_codigoCurso.setBounds(23, 296, 172, 21);
 		contentPane.add(textField_codigoCurso);
-		
+
 		JLabel lblCursoVinculado = new JLabel("Código do Curso vinculado");
 		lblCursoVinculado.setBounds(23, 275, 195, 21);
 		contentPane.add(lblCursoVinculado);
+
+
 		btnVoltar.addActionListener(new ActionListener() {
 
 			@Override
@@ -153,7 +157,34 @@ public class TelaDisciplinas extends JFrame {
 
 			}
 		});
+		
+		TelaDisciplinasController telaDisciplinasController =
+		        new TelaDisciplinasController(
+		            textField_disciplinaConsulta,
+		            textField_IdDisciplina,
+		            textField_nomeDisciplina,
+		            textField_diaSemana,
+		            textField_horaMinistrada,
+		            textField_horasDiarias,
+		            textField_codigoCurso
+		        );
 
-		TelaDisciplinasController tdcontroller = new TelaDisciplinasController();
+
+		btnCadastrar.addActionListener(e ->{
+			if(telaDisciplinasController.validaTela()) {
+				telaDisciplinasController.chamarCadastroDisciplina();
+			}
+		});
+		
+		btnConsultar.addActionListener(e->{
+			if(telaDisciplinasController.validaConsulta()) {
+				telaDisciplinasController.chamarConsulta();
+			}
+		});
+		
+		
+		
+
 	}
+
 }
