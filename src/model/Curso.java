@@ -1,16 +1,19 @@
 package model;
 
 public class Curso extends AreaConhecimento{
-	private int codigocodigo;
+	private long codigocodigo;
 	private String nomeCurso;
-	public Curso() {
-		super();
-		
+	private String areaCurso;
+	
+	public Curso(long codigoCurso, String nomeCurso, String areaCurso) {
+		this.codigocodigo = codigoCurso;
+		this.nomeCurso = nomeCurso;
+		this.areaCurso = areaCurso;
 	}
-	public int getCodigocodigo() {
+	public long getCodigocodigo() {
 		return codigocodigo;
 	}
-	public void setCodigocodigo(int codigocodigo) {
+	public void setCodigocodigo(long codigocodigo) {
 		this.codigocodigo = codigocodigo;
 	}
 	public String getNomeCurso() {
@@ -19,6 +22,13 @@ public class Curso extends AreaConhecimento{
 	public void setNomeCurso(String nomeCurso) {
 		this.nomeCurso = nomeCurso;
 	}
+	public String getAreaCurso() {
+		return areaCurso;
+	}
+	public void setAreaCurso(String areaCurso) {
+		this.areaCurso = areaCurso;
+	}
+	
 	
 	
 }

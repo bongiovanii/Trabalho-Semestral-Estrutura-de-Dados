@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import model.Professor;
+
 public class TelaProfessorController implements ActionListener {
 	FuncionarioController func = new FuncionarioController();
 
@@ -55,10 +57,10 @@ public class TelaProfessorController implements ActionListener {
 		} catch (NumberFormatException e) {
 		    JOptionPane.showMessageDialog(null, "Digite um número válido.");
 		}
-		
-		
-
+			
 	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -1,12 +1,20 @@
 package model;
 
-public class Disciplina extends Curso {
+public class Disciplina {
 	private int codigoDisciplina;
 	private String diaSemana;
 	private String horario;
 	private int qtdHorasDiarias;
 	private String nomeDisciplina;
 	private int codigoCurso;
+	
+	
+	
+
+	public Disciplina() {
+		super();
+	
+	}
 
 	public int getCodigoCurso() {
 		return codigoCurso;
@@ -16,10 +24,6 @@ public class Disciplina extends Curso {
 		this.codigoCurso = codigoCurso;
 	}
 
-	public Disciplina() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	public int getCodigoDisciplina() {
 		return codigoDisciplina;
